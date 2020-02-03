@@ -1,9 +1,26 @@
 from django.shortcuts import render, redirect, reverse
-from .models import Post, Category, Comment
-from .forms import CommentForm, SearchForm
+from .models import BlogUser, Post, PostImage, Category, Comment
+from .forms import CommentForm, SearchForm, CreatePostForm, CreatePostImageForm, LoginForm
+from django import forms
 from django.http import HttpResponseRedirect
+from django.forms import modelformset_factory
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
+@login_required(login_url="../../login/")
+def blog_create(request):   
+    post_form = CreatePostForm()
+    post_img_form = CreatePostImageForm()
+
+    context = {
+        "postform":post_form,
+        "postimgs":post_img_form,
+    }
+
+    return render(request, "blog_create.html", context)
+
 def search_funtion(request, context, *args, **kwargs):        
     if request.method == 'POST':
         search_form = SearchForm(request.POST)
@@ -38,11 +55,11 @@ def blog_post(request):
 def list_post(request):      
     search_form = SearchForm()    
     context     = {"search_form":search_form}
-    template    = "blog_post_list.html"
+    template    = "search_results.html"
     
     if search_funtion(request, context) != False:
         HttpResponseRedirect(reverse('blog-posts'))
-        return render(request,"blog_post_list.html", search_funtion(request, context))
+        return render(request,"search_results.html", search_funtion(request, context))
     else:
         return render(request, template, context)
 
@@ -50,21 +67,9 @@ def blog_detail(request, slug):
     post = Post.objects.get(slug=slug)        
     related_posts = Post.objects.filter(category__name__startswith=post.category.values()[0]['name']).order_by('-created_on')
     form = CommentForm()
-    search_form = SearchForm()
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = Comment(
-                author=form.cleaned_data["author"],
-                body=form.cleaned_data["body"],
-                post=post
-            )
-            comment.save()
-            form = CommentForm()
-            return HttpResponseRedirect(reverse('blog-posts-details', args=[post.slug]))
-
+    search_form = SearchForm()    
     comments = Comment.objects.filter(post=post)
-    number_of_commments = str(len(comments)) + " Comment" if len(comments) == 1 else str(len(comments)) + " Comments"
+    number_of_commments = len(comments)
 
     context = {
         "post":                 post,
@@ -78,22 +83,22 @@ def blog_detail(request, slug):
     
     if search_funtion(request, context) != False:
         HttpResponseRedirect(reverse('blog-posts'))
-        return render(request,"blog_post_list.html", search_funtion(request, context))
+        return render(request,"search_results.html", search_funtion(request, context))
     else:
         return render(request, template, context)
 
 def blog_category(request, category):
-    posts = Post.objects.filter(category__name__contains=category).order_by('-created_on')
+    posts = Post.objects.filter(category__name__startswith=category)    
+    print(category)
+    print(posts)
     search_form = SearchForm()
     context = {
-        "search_form":  search_form,
-        "category":     category,
         "posts":        posts,
     }
     template = "blog_category.html"
 
     if search_funtion(request, context) != False:
-        return render(request,"blog_post_list.html", search_funtion(request, context))
+        return render(request,"search_results.html", search_funtion(request, context))
     else:
         return render(request, template, context)
 
@@ -106,10 +111,10 @@ def post_full_page(request):
         'obj':          obj[1],
         'objs':         obj}      
 
-    template = "post_full_page.html"
+    template = "search_results.html"
 
     if search_funtion(request, context) != False:
-        return render(request,"blog_post_list.html", search_funtion(request, context))
+        return render(request,"search_results.html", search_funtion(request, context))
     else:
         return render(request, template, context)
 
@@ -117,13 +122,50 @@ def location_map(request):
     return render(request, "map.html", {})
 
 def sign_up(request):      
-    return render(request, "signup.html", {})    
+    return render(request, "user_signup.html", {})    
 
 def sign_in(request):      
-    return render(request, "signin.html", {})
+    form = LoginForm()
+    if request.method == "POST":        
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            users = BlogUser.objects.all()
+            form_email = form.cleaned_data["email"]
+            form_password = form.cleaned_data["password"]
+            
+            try:
+                #user = BlogUser.objects.get(email=form_email, password=form_password)
+                #print(f"User: {user.username} \nPass: {user.password}")
+                user = authenticate(email=form_email, password=form_password)
+                print(user)
+                login(request, user)
+                print("User logged in")
+                return reverse("blog-create")
+            except Exception:
+                raise forms.ValidationError("No such user exists")
+                pass
+
+    context = {
+        "form":form,
+    }
+    return render(request, "user_signin.html", context)
 
 def image_post(request):      
-    return render(request, "images.html", {})
+    exFormSet = modelformset_factory(PostImage, fields=('post_images','post'), extra=3)
+
+    if request.method == "POST":        
+        form = exFormSet(request.POST)
+        print("Saving Form")
+        instances = form.save(commit=False)        
+
+        for instance in instances:
+            if instance is not None:
+                print(request.POST)
+                instance.save()
+    form = exFormSet(queryset=PostImage.objects.none())
+
+    return render(request, "images.html", {"form":form})
 
 def intro(request):      
     return render(request, "intro.html", {})
@@ -143,4 +185,3 @@ def blog_post(request):
     return render(request, "subscribe.html", {})
 
 '''
-

@@ -13,7 +13,7 @@ header,
     height: 100vh;
 }
 }
-/*
+
 .top-nav-collapse {
     background-color: #283593 !important;
 }
@@ -27,7 +27,7 @@ header,
     background: #283593 !important;
     }
 }
-*/
+
 @media (max-height: 300px) {
     .navbar:not(.top-nav-collapse) {
     background: #283593 !important;
@@ -47,8 +47,7 @@ header,
     width: 80px;
   }
 
-#intro {
-    background: url("../img/sample.jpg") no-repeat center center fixed;
+#intro {    
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
