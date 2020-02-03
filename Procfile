@@ -1,0 +1,1 @@
+web: gunicorn MegaBlog.wsgi --log-file -

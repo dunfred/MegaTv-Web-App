@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{% block head_title %}Welcome To Mega TV{% endblock head_title %}</title>
+	{% load static %}
+	<meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!--===============================================================================================-->   
+	<link rel="stylesheet" type="text/css" href="{% static 'font/font-awesome-4.7.0/css/font-awesome.min.css' %}">	
+
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">	
+	<link rel="stylesheet" type="text/css" href="{% static 'css/mdb.min.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+<!--===============================================================================================-->
+	</head>
+	<body>
+    {% block header%}
+    <header>
+        <!--Navbar-->
+        <nav id="main_navigation" class="navbar navbar-expand-lg navbar-dark indigo fixed-top">
+            <div class="container">
+                <!-- Navbar brand -->
+                <a class="navbar-brand" href="{% url 'blog-home' %}">Mega Soundz</a>
+        
+                <!-- Collapse button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+                    aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+              <!-- Collapsible content -->
+              <div class="collapse navbar-collapse" id="basicExampleNav">
+      
+                <!-- Links -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item {% block nav_home_clicked %} active {% endblock nav_home_clicked %} ">
+                        <a class="nav-link" href="{% url 'blog-home' %}">                            
+                            Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {% block nav_post_clicked %}{% endblock nav_post_clicked %}">
+                        <a class="nav-link" href="{% url 'blog-posts' %}">Posts</a>                        
+                    </li>
+
+                    <li class="nav-item {% block entertainment %}{% endblock entertainment %}">
+                        <a class="nav-link" href="../../blog/entertainment">Entertainment</a>
+                    </li>
+
+                    <li class="nav-item {% block politics %}{% endblock politics %}">
+                        <a class="nav-link" href="../../blog/politics">Politics</a>                       
+                    </li>
+                    
+                    <li class="nav-item {% block education %}{% endblock education %}">
+                        <a class="nav-link" href="../../blog/education">Education</a>                       
+                    </li>
+
+                  <!-- Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Options</a>
+                        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="nav-link" href="{% url 'SignUp' %}">Sign up</a>
+                        <a class="nav-link" href="{% url 'Login' %}">Sign In</a>
+                        <a class="dropdown-item" href="{% url 'Slides' %}">Image Slides</a>
+                        <a class="dropdown-item" href="{% url 'Landing-Page' %}">Landing Page</a>                        
+                        </div>
+                  </li>
+      
+                </ul>
+                <!-- Links -->
+      
+                <form action="" method="post" class="form-inline">
+                    {% csrf_token %}
+                    <div class="md-form my-0">
+                        {{search_form.search_body}}
+                        <!--<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
+                    </div>
+                </form>
+              </div>
+              <!-- Collapsible content -->
+            </div>
+        </nav>
+        {% block mask %}
+        <!-- Full Page Intro -->
+        <div id="intro" class="view jarallax" data-jarallax='{"speed": 0.2}'>
+            <!-- Mask & flexbox options-->
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+            <!-- Content -->
+            <div class="container">
+                <!--Grid row-->
+                <div class="row">
+                <!--Grid column-->
+                <div class="col-md-12 mb-4 white-text text-center">
+                    <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-0 pt-md-5 pt-5 wow fadeInDown"
+                    data-wow-delay="0.3s"><strong>Mega Multimedia Tv</strong></h1>
+                    <hr class="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s">
+                    <h5 class="text-uppercase mb-4 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>Photography
+                        , Design & Movie Production</strong></h5>
+                    <a class="btn btn-outline-white wow fadeInDown" data-wow-delay="0.4s">portfolio</a>
+                    <a class="btn btn-outline-white wow fadeInDown" data-wow-delay="0.4s">About me</a>
+                </div>
+                <!--Grid column-->
+                </div>
+                <!--Grid row-->
+            </div>
+            <!-- Content -->
+            </div>
+            <!-- Mask & flexbox options-->
+        </div>
+        <!-- Full Page Intro -->
+        {% endblock mask %}
+        <!--/.Navbar-->
+    </header>
+    {% endblock header%}
+
+	{% block main_body %}	
+    <main>      
+        <div class="container mt-5">
+            <!--Section: Content-->
+            <section class="">
+                <!-- Section heading -->
+                <h3 class="text-center font-weight-bold mb-5">Latest News Updates</h3>
+                <!-- Grid row -->
+                <div class="row">
+                <!-- Grid column -->
+                {% for post in obj %}
+                
+                    <div class="col-lg-4 col-md-12 mb-lg-0 mb-4" style="height: 500px;">
+                        <!-- Card -->
+                        <div class="card hoverable" style="height: 480px;">                            
+                            <!-- Card image -->                            
+                            <img class="card-img-top" src="../media/{{ post.post_thumbnail }}" alt="Post Thumbnail" style="height:50%;">
+                            <a href="./blog/{{post.slug}}" style="position: absolute;top: 0; left: 0;height: 100%; width: 100%;"></a>    
+                            <!-- Card content -->
+                                <div class="card-body">
+                                    <!-- Title -->
+                                    <h4 class="font-weight-bold mb-3"> {{ post.post_title }}</h4>                            
+                                    <!--Date Published-->
+                                    <p class='mb-1'>By <a class="font-weight-bold">Innocent K. Dunyo</a> {{ post.created_on.date }} </p>
+                                    <!-- Text -->
+                                    <p class="card-title text-muted font-small mt-3 mb-2">{{ post.post_brief}}</p>                                   
+                                    <a class="btn btn-info btn-rounded btn-md">Read more </i></a>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- Card -->
+                    </div>                    
+                {% endfor %}
+                <!-- Grid column -->                
+                </div>
+                <!-- Grid row -->    
+            <div class="text-center mt-5">
+                <a href="#!">Browse all blog posts</a>
+            </div>
+        </section>
+        <!--Section: Content-->
+        </div>
+    </main>
+    {% endblock main_body %}
+
+    {% block map %}
+    <div class="container-fluid my-5">
+        <section>       
+            <!-- Card -->
+            <div class="card my-5">        
+            <!-- Grid row -->
+            <div class="row">        
+                <!-- Grid column -->
+                <div class="col-md-6">        
+                <!-- Google map -->
+                <div id="map-container-google-1" class="map-container rounded" style="height: 400px">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.9781915126164!2d0.7957138295850424!3d6.133632379049968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10213c66efd7b837%3A0x1e3bc2d8ca47f7b8!2sMega%20Multimedia!5e0!3m2!1sen!2sgh!4v1573253942154!5m2!1sen!2sgh" frameborder="0"
+                    style="border:0" allowfullscreen></iframe>
+                </div>
+                <!-- Google Maps -->        
+                </div>
+                <!-- Grid column -->        
+                <!-- Grid column -->
+                <div class="col-10 col-md-4 mx-auto align-self-center py-4">
+        
+                <p class="text-uppercase small grey-text"><strong>Head Office</strong></p>
+                <h5 class="font-weight-normal mb-4">Volta Region, Akatsi</h5>
+                <p class="text-muted font-weight-light">4QMX+P4 Akatsi<br>Near Global Evangelical Church</p>
+                <p class="text-muted font-weight-light mb-0">Phone: +233 024 312 1622<br>Email: innocentdunyo@yahoo.com</p>
+        
+                </div>
+                <!-- Grid column -->        
+            </div>
+            <!-- Grid row -->        
+            </div>
+            <!-- Card -->        
+        </section>        
+    </div>
+    {% endblock map %}
+
+    {% block footer%}
+    <!-- Footer -->
+    <footer class="page-footer font-small indigo darken-3">
+        <!-- Footer Elements -->
+        <div class="container">      
+            <!-- Grid row-->
+            <div class="row">    
+                <!-- Grid column -->
+                <div class="col-md-12 py-5">
+                    <div class="mb-5 flex-center">            
+                        <!-- Facebook -->
+                        <a class="fb-ic">
+                            <i class="fa fa-facebook-f fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        </a>
+                        <!-- Twitter -->
+                        <a class="tw-ic">
+                            <i class="fa fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        </a>
+                        <!-- Google +-->
+                        <a class="gplus-ic">
+                            <i class="fa fa-google-plus fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        </a>
+                        <!--Linkedin -->
+                        <a class="li-ic">
+                            <i class="fa fa-linkedin fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        </a>
+                        <!--Instagram-->
+                        <a class="ins-ic">
+                            <i class="fa fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        </a>
+                        <!--Pinterest-->
+                        <a class="pin-ic">
+                            <i class="fa fa-pinterest fa-lg white-text fa-2x"> </i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Grid column -->      
+            </div>
+            <!-- Grid row-->      
+        </div>
+        <!-- Footer Elements -->
+      
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2019 Copyright:
+          <a href="https://megamultimedia.com/"> MegaMultimedia.com</a>
+        </div>
+        <!-- Copyright -->
+      
+      </footer>
+      <!-- Footer -->    
+	{% endblock footer%}
+	</body>
+<!--===============================================================================================-->	
+	<script src="{% static 'js/jquery-3.4.1.min.js' %}" ></script>
+	<script src="{% static 'js/bootstrap.min.js' %}" ></script>
+<!--===============================================================================================-->
+	<script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}" ></script>    
+
+    

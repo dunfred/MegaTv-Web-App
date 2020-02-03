@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+
+{% block nav_home_clicked %}
+{% endblock nav_home_clicked %}
+
+{% block nav_post_clicked %}
+  active
+{% endblock nav_post_clicked %}
+
+{% block main_body %}
+<div class="container mt-5">
+  <!--Section: Content-->
+  <section class="">
+  {{ search_results}}
+    <!-- Section heading -->
+    <h3 class="text-center font-weight-bold mb-5">Search Results</h3>
+    <!-- Grid row -->
+    <div class="row">
+    {% for search in search_results %}
+      <!-- Grid column -->
+      <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
+        <!-- Card -->
+        <div class="card hoverable" style="height: 480px;">
+          <!-- Card image -->
+          <a href="../blog/{{search.slug}}" style="height: 100%; width: 100%;">
+            <img class="card-img-top img-fluid" src="../../media/{{search.post_thumbnail}}" alt="Card image cap" style="height:240px;">
+          
+            <!-- Card content -->
+            <div class="card-body">
+              <!-- Title -->
+              <a href="../blog/{{search.slug}}" class="black-text">{{search.post_title}}</a>
+              <!-- Text -->
+              <p class="card-title text-muted font-small mt-3 mb-2">{{search.post_brief}}</p>
+              
+              <button type="button" class="btn btn-flat text-primary p-0 mx-0">Read more<i class="fa fa-angle-right ml-2"></i></button>          
+            </div>
+          </a>
+        </div>
+        <!-- Card -->
+      </div>
+      <!-- Grid column -->
+    {% endfor %}
+    </div>
+    <!-- Grid row -->    
+    <div class="text-center mt-5">
+    	<a href="#!">Browse all blog posts</a>
+    </div>
+  </section>
+  <!--Section: Content-->
+</div>
+{% endblock main_body %}
+

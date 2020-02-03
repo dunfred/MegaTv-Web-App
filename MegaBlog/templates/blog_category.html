@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block main_body %}
+<!-- Section: Blog v.4 -->
+<section class="my-5">
+
+{% for post in posts %}  
+<!-- Grid row -->
+<div class="row">
+  <!-- Grid column -->
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <!-- Card -->
+    <div class="card card-cascade wider reverse">
+      <!-- Card image -->
+      <div class="view view-cascade overlay">
+        <img class="card-img-top img-fluid" src="../../media/{{ post.post_thumbnail }}" alt="Post Thumbnail goes here" >
+        <a href="#!">
+          <div class="mask rgba-black-slight"></div>
+        </a>
+      </div>
+
+      <!-- Card content -->
+      <div class="card-body card-body-cascade text-center">
+
+        <!-- Title -->
+        <h2 class="font-weight-bold"><a>{{post.post_title}}</a></h2>
+        <!-- Data -->
+        <p>Written by <a><strong>Innocent K. Dunyo</strong></a>, {{post.created_on}}</p>
+        <!-- Social shares -->
+        <div class="social-counters">
+          <!-- Facebook -->
+          <a class="btn btn-fb">
+            <i class="fa fa-facebook-f pr-2"></i>
+            <span class="clearfix d-none d-md-inline-block">Facebook</span>
+          </a>
+          <span class="counter">46</span>
+          <!-- Twitter -->
+          <a class="btn btn-tw">
+            <i class="fa fa-twitter pr-2"></i>
+            <span class="clearfix d-none d-md-inline-block">Twitter</span>
+          </a>
+          <span class="counter">22</span>
+          <!-- Google+ -->
+          <a class="btn btn-gplus">
+            <i class="fa fa-google-plus-g pr-2"></i>
+            <span class="clearfix d-none d-md-inline-block">Google+</span>
+          </a>
+          <span class="counter">31</span>
+          <!-- Comments -->
+          <a class="btn btn-default">
+            <i class="fa fa-comments pr-2"></i>
+            <span class="clearfix d-none d-md-inline-block">Comments</span>
+          </a>
+          <span class="counter">18</span>
+        </div>
+        <!-- Social shares -->
+
+      </div>
+      <!-- Card content -->
+
+    </div>
+    <!-- Card -->
+
+    <!-- Excerpt -->
+    <div class="mt-5">
+
+      <p>{{post.post_content}}</p>      
+    </div>
+
+  </div>
+  <!-- Grid column -->
+  
+</div>
+<!-- Grid row -->
+
+  <hr class="mb-5 mt-4">
+{% endfor %}
+  
+</section>
+<!-- Section: Blog v.4 -->
+{% endblock main_body %}
+
