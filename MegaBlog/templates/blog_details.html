@@ -18,9 +18,7 @@
 
                         <!--Featured Image-->
                         <div class="card mb-4 wow fadeIn">
-
                             <img src="../../media/{{ post.post_thumbnail }}" class="img-fluid" alt="">
-
                         </div>
                         <!--/.Featured Image-->
 
@@ -284,9 +282,9 @@
                                     <img class="d-flex mb-3 mx-auto z-depth-1" src="{% static "img/ethical.jpg" %}" alt="Generic placeholder image"
                                         style="width: 100px;">
                                     <div class="media-body text-center text-md-left ml-md-3 ml-0">
-                                        <h5 class="mt-0 font-weight-bold">Innocent K. Dunyo
+                                        <h5 class="mt-0 font-weight-bold">Fred K. Dunyo
                                         </h5>
-                                        Passionate father of four and a big time tech lover.
+                                        Passionate Data Scientist and a big time tech news lover.
                                     </div>
                                 </div>
 
@@ -297,35 +295,14 @@
 
                         <!--Comments-->
                         <div class="card card-comments mb-3 wow fadeIn">                            
-                            <div class="card-header font-weight-bold">{{number_of_commments}}</div>                            
+                            <div id="comment_count" class="card-header font-weight-bold"><!--Comment Status --></div>                            
                             
-                                <div class="card-body">                                
-                                    {% for comment in comments %}
-                                        <div class="media d-block d-md-flex mt-3">                                        
-                                            <img style="width:100px;" class="d-flex mb-3 mx-auto " src="https://mdbootstrap.com/img/Photos/Avatars/img (30).jpg" alt="Generic placeholder image">
-                                            <div class="media-body text-center text-md-left ml-md-3 ml-0">
-                                                <h5 class="mt-0 font-weight-bold">{{comment.author}}                                                    
-                                                    <!--<a href="" class="pull-right">
-                                                        <i class="fa fa-reply"></i>
-                                                    </a>-->
-                                                </h5>                                                
-                                                <p>{{comment.body}}</p>                                                
-                                            </div>               
-                                            <p class="blockquote-footer">{{ comment.created_on }}</p>                                                            
-                                        </div>
-                                    {% endfor %} 
-                                    <!-- Quick Reply -->
-                                    <div class="form-group mt-4">
-                                        <label for="quickReplyFormComment">Quick Reply</label>
-                                        {{ form.body }}
-
-                                        <div class="text-center">
-                                            <button class="btn btn-info btn-sm" type="submit">Post</button>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div id='content' class="card-body">                                                                
+                                <!-- Quick Reply 
+                                Commets fetched XMLHttpRequest at my comment api will be passed in here
+                                -->                                                 
                             </div>
+                            
                         </div>
                         <!--/.Comments-->
 
@@ -335,7 +312,7 @@
                             <div class="card-body">
 
                                 <!-- Default form reply -->
-                                <form action="/blog/{{ post.slug }}/" method="post">
+                                <form id="CommentID" action="/blog/{{ post.slug }}/" method="post">
                                     {% csrf_token %}
                                     <!-- Comment -->
                                     <div class="form-group">
@@ -526,5 +503,68 @@
 
     </footer>
     <!--/.Footer-->
+    {% endblock footer %}
 
-{% endblock footer %}
+    {% block javascript %}
+    <script>
+       $(document).ready(function () {                    
+        $comment_cnt = $('#comment_count');
+        $comment_cnt.html("{{number_of_commments}}"+" Comments");
+
+        $comments_element = $('#content');
+        
+        function addComment(comment) {
+            $comments_element.append("<div class='media d-block d-md-flex mt-3'><img style='width:56px; height: 56px;' class='d-flex mb-3 mx-auto' src='{% static 'img/avatar_comment.jpg'%}' alt='Generic placeholder image'><div class='media-body text-center text-md-left ml-md-3 ml-0'><h5 class='mt-0 font-weight-bold'>" + comment.author + "</h5><p>" + comment.body + "</p></div><p class='blockquote-footer'>" + comment.created_on + "</p></div>");
+        }
+        //Grab and show post's comments
+        $.ajax({            
+            url: 'https://dunfred-blog.herokuapp.com/api/{{post.id}}/',
+            type: 'GET',
+            dataType: 'json',            
+            success: function(resp) {
+                $.each(resp, function(i, comment) {
+                addComment(comment);
+            });
+            },
+            error: function () {
+                alert("Error getting comments for this blog post.")
+            }
+        })
+        
+        //On posting new comments, handle it with ajax and append to previous on webpage
+        $("#CommentID").submit(function(e) {
+            e.preventDefault();
+          
+            console.log($(".authorForm").val());
+            console.log($(".bodyForm").val());
+            console.log('{{post.id}}');
+
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://dunfred-blog.herokuapp.com/api/',                
+                data: {author: $(".authorForm").val(),
+                        body:   $(".bodyForm").val(),
+                        post:   '{{post.id}}',
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        },
+                success: function(resp) {
+                    addComment(resp);
+                    var num_cmt = parseInt("{{number_of_commments}}");
+                    num_cmt += 1;
+                    $comment_cnt.html(num_cmt+" Comments");
+                },
+                error: function () {
+                    alert("Error making a post request.");
+                }
+            });
+
+        });
+
+
+    });
+
+    </script>
+    <script src="{% static 'js/main.js' %}" ></script>    
+    {% endblock javascript %}
+
