@@ -299,7 +299,7 @@
                             
                             <div id='content' class="card-body">                                                                
                                 <!-- Quick Reply 
-                                Commets fetched XMLHttpRequest at my comment api will be passed in here
+                                Comments fetched with XMLHttpRequest through my comment api will be passed in here
                                 -->                                                 
                             </div>
                             
@@ -518,7 +518,7 @@
         }
         //Grab and show post's comments
         $.ajax({            
-            url: 'https://dunfred-blog.herokuapp.com/api/{{post.id}}/',
+            url: 'https://dunfred-blog.herokuapp.com/api/{{post.id}}/?format=json',
             type: 'GET',
             dataType: 'json',            
             success: function(resp) {
