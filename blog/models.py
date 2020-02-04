@@ -34,8 +34,7 @@ class Post(models.Model):
     created_on = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(default=datetime.now)
     category = models.ManyToManyField("Category",related_name='posts')
-    slug = models.SlugField(null=True, unique=True)
-    #user = models.ForeignKey('BlogUser', on_delete=models.CASCADE)
+    slug = models.SlugField(null=True, unique=True)    
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.post_title)
