@@ -174,14 +174,3 @@ def video_post(request):
     obj = Post.objects.filter()[0]
     return render(request, "video.html", {'obj':obj})
 
-
-'''
-def blog_post(request):      
-    return render(request, "counter.html", {})
-
-
-
-def blog_post(request):      
-    return render(request, "subscribe.html", {})
-
-'''
