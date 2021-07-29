@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import django_heroku
+# import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,7 @@ SECRET_KEY = '+nc&ejx9=9!x8xsvi5kh0c=v@qy%#1h_2!9q-3g(bc$(17r0k5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dunfred-blog.herokuapp.com/']
+ALLOWED_HOSTS = ['dunfred-blog.herokuapp.com/','127.0.0.1']
 
 
 # Application definition
@@ -40,12 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #Not prebuilt Apps
-    'blog',
+    'blog.apps.BlogConfig',
     'rest_framework',
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,6 +83,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'NAME': 'mega_db',
+        # 'USER': 'root',
+        # 'PASSWORD':'',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
+        # 'OPTIONS':{
+        #     'sql_mode':'traditional'
+        # }
+
     }
 }
 
@@ -139,9 +148,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 
-import dj_database_url
-prod_db = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
+# import dj_database_url
+# prod_db = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(prod_db)
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
+# # Activate Django-Heroku.
+# django_heroku.settings(locals())

@@ -27,13 +27,13 @@ class Category(models.Model):
 class Post(models.Model):    
     post_title = models.CharField(default="Post Title",max_length=50)
     post_brief = models.CharField(default="Post Brief",max_length=150)
-    post_thumbnail = models.ImageField(blank=True, upload_to='blog/thumbs/%Y/%B/%a/')
+    post_thumbnail = models.ImageField(blank=True, upload_to='staticfiles/thumbs/%Y/%B/%a/')
     post_content = models.TextField()    
-    post_images = models.ImageField(blank=True, upload_to='blog/images/%Y/%B/%a/')    
-    post_videos = models.FileField(blank=True, upload_to='blog/videos/%Y/%B/%a/')
+    post_images = models.ImageField(blank=True, upload_to='staticfiles/images/%Y/%B/%a/')    
+    post_videos = models.FileField(blank=True, upload_to='staticfiles/videos/%Y/%B/%a/')
     created_on = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(default=datetime.now)
-    category = models.ManyToManyField("Category",related_name='posts')
+    category = models.ManyToManyField(Category,related_name='posts')
     slug = models.SlugField(null=True, unique=True)    
 
     def save(self, *args, **kwargs):
@@ -44,17 +44,24 @@ class Post(models.Model):
         return self.post_title
 
 class PostImage(models.Model):
-    post_images = models.ImageField(blank=True, upload_to='blog/images/%Y/%B/%a/')
-    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    post_images = models.ImageField(blank=True, upload_to='staticfiles/images/%Y/%B/%a/')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.post.post_title
 
-class Comment(models.Model):
-    author = models.CharField(max_length=60)
-    body = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+class Author(models.Model):
+    author = models.CharField(default='Anonymous', max_length=60, unique=True)
 
     def __str__(self):
         return self.author
+
+class Comment(models.Model):
+    author_id = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.CharField(default='Anonymous', max_length=60, unique=True)
+    body = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.pk} -- {self.author}"

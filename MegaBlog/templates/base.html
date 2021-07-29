@@ -47,15 +47,15 @@
                     </li>
 
                     <li class="nav-item {% block entertainment %}{% endblock entertainment %}">
-                        <a class="nav-link" href="../../blog/entertainment">Entertainment</a>
+                        <a class="nav-link" href="{% url 'blog-category' category='entertainment' %}">Entertainment</a>
                     </li>
 
                     <li class="nav-item {% block politics %}{% endblock politics %}">
-                        <a class="nav-link" href="../../blog/politics">Politics</a>                       
+                        <a class="nav-link" href="{% url 'blog-category' category='politics' %}">Politics</a>                       
                     </li>
                     
                     <li class="nav-item {% block education %}{% endblock education %}">
-                        <a class="nav-link" href="../../blog/education">Education</a>                       
+                        <a class="nav-link" href="{% url 'blog-category' category='education' %}">Education</a>                       
                     </li>
 
                   <!-- Dropdown -->
@@ -98,8 +98,8 @@
                     <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-0 pt-md-5 pt-5 wow fadeInDown"
                     data-wow-delay="0.3s"><strong>Dunfred's Hub</strong></h1>
                     <hr class="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s">
-                    <h5 class="text-uppercase mb-4 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>Design
-                        Create & Build Smart Applications and Web Full Backend Systems</strong></h5>
+                    <h5 class="text-uppercase mb-4 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>Design,
+                        Create & Build Smart Web Applications and Full Mobile Application Backend Systems</strong></h5>
                     <a class="btn btn-outline-white wow fadeInDown" data-wow-delay="0.4s">Portfolio</a>
                     <a class="btn btn-outline-white wow fadeInDown" data-wow-delay="0.4s">About me</a>
                 </div>
@@ -140,7 +140,7 @@
                                     <!-- Title -->
                                     <h4 class="font-weight-bold mb-3"> {{ post.post_title }}</h4>                            
                                     <!--Date Published-->
-                                    <p class='mb-1'>By <a class="font-weight-bold">Innocent K. Dunyo</a> {{ post.created_on.date }} </p>
+                                    <p class='mb-1'>By <a class="font-weight-bold">Fred K. Dunyo</a> {{ post.created_on.date }} </p>
                                     <!-- Text -->
                                     <p class="card-title text-muted font-small mt-3 mb-2">{{ post.post_brief}}</p>                                   
                                     <a class="btn btn-info btn-rounded btn-md">Read more </i></a>

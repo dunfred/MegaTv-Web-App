@@ -4,6 +4,7 @@ from .forms import CommentForm, SearchForm, CreatePostForm, CreatePostImageForm,
 from django import forms
 from django.http import HttpResponseRedirect
 from django.forms import modelformset_factory
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -63,8 +64,8 @@ def list_post(request):
     else:
         return render(request, template, context)
 
-def blog_detail(request, slug):          
-    post = Post.objects.get(slug=slug)        
+def blog_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)        
     related_posts = Post.objects.filter(category__name__startswith=post.category.values()[0]['name']).order_by('-created_on')
     form = CommentForm()
     search_form = SearchForm()    

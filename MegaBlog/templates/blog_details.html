@@ -514,11 +514,12 @@
         $comments_element = $('#content');
         
         function addComment(comment) {
-            $comments_element.append("<div class='media d-block d-md-flex mt-3'><img style='width:56px; height: 56px;' class='d-flex mb-3 mx-auto' src='{% static 'img/avatar_comment.jpg'%}' alt='Generic placeholder image'><div class='media-body text-center text-md-left ml-md-3 ml-0'><h5 class='mt-0 font-weight-bold'>" + comment.author + "</h5><p>" + comment.body + "</p></div><p class='blockquote-footer'>" + comment.created_on + "</p></div>");
+            $comments_element.append("<div class='media d-block d-md-flex mt-3'><img style='width:56px; height: 56px;' class='d-flex mb-3 mx-auto' src='{% static 'img/sample.jpg'%}' alt='Generic placeholder image'><div class='media-body text-center text-md-left ml-md-3 ml-0'><h5 class='mt-0 font-weight-bold'>" + comment.author + "</h5><p>" + comment.body + "</p></div><p class='blockquote-footer'>" + comment.created_on + "</p></div>");
         }
         //Grab and show post's comments
+        console.log('{% url "all-comments-api" %}');
         $.ajax({            
-            url: 'https://dunfred-blog.herokuapp.com/api/{{post.id}}/?format=json',
+            url: '{% url "all-comments-api" %}',
             type: 'GET',
             dataType: 'json',            
             success: function(resp) {
@@ -530,25 +531,21 @@
                 alert("Error getting comments for this blog post.")
             }
         })
-        
+
         //On posting new comments, handle it with ajax and append to previous on webpage
         $("#CommentID").submit(function(e) {
-            e.preventDefault();
-          
-            console.log($(".authorForm").val());
-            console.log($(".bodyForm").val());
-            console.log('{{post.id}}');
-
+            e.preventDefault();          
 
             $.ajax({
                 type: 'POST',
-                url: 'https://dunfred-blog.herokuapp.com/api/',                
+                url: '{% url "all-comments-api" %}',
                 data: {author: $(".authorForm").val(),
                         body:   $(".bodyForm").val(),
                         post:   '{{post.id}}',
                         csrfmiddlewaretoken: "{{ csrf_token }}",
                         },
                 success: function(resp) {
+                    $("#CommentID").trigger("reset");
                     addComment(resp);
                     var num_cmt = parseInt("{{number_of_commments}}");
                     num_cmt += 1;

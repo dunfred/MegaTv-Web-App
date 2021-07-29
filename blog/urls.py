@@ -14,7 +14,7 @@ urlpatterns = [
     path('',                     blog_post,         name='blog-home'),
     path('blog/',                list_post,         name='blog-posts'),
     path('blog/<str:slug>/',     blog_detail,       name='blog-posts-details'),
-    path('blog/<str:category>/', blog_category,     name='blog-category'),
+    path('blog/category/<str:category>/', blog_category,     name='blog-category'),
     path('api/',                 include("blog.api.urls")),
     #path('blog/searches/',       blog_category,     name='blog-searches'),
     path('blog/all',             post_full_page,    name='all-blog-posts'),

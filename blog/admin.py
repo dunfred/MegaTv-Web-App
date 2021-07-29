@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, PostImage, Category, Comment, BlogUser
+from .models import Post, PostImage, Category, Comment, BlogUser, Author
 
 class PostAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -17,4 +17,5 @@ admin.site.register(BlogUser)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(PostImage)
+admin.site.register(Author)
 admin.site.register(Comment)
